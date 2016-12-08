@@ -1,8 +1,8 @@
 # *********************
 # Script to authorize add an IP addres to sql authorized network
-# Usage: 'gcloud-sql-add-authorized-ip [command: add|remove] [IP-CIDR-notation]'
+# Usage: 'gcloud-sql-add-authorized-ip [instanceName] [command: add|remove] [IP-CIDR-notation]'
 # about CIDR notation https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation
-# Sample: 'gcloud-sql-add-authorized-ip add 10.10.10.10/24'
+# Sample: 'gcloud-sql-add-authorized-ip instanceName add 10.10.10.10/24'
 # Author: Doers DF (hola@doersdf.com)
 # ********************
 
@@ -18,9 +18,9 @@ if len(sys.argv)==4:
     newIP = sys.argv[2]
     command = sys.argv[1]
     if pattern.match(newIP)==None:
-        print("[203] Error: Invalid IP.\n   Use IP CIDR notation Sample 'gcloud-sql-add-authorized-ip add 192.168.0.1/24'' ")
+        print("[203] Error: Invalid IP.\n   Use IP CIDR notation Sample 'gcloud-sql-add-authorized-ip instanceName add 192.168.0.1/24'' ")
     elif command!="add" and command!="remove":
-        print("[202] Error: Invalid command.\n   Use Add or Remove 'gcloud-sql-add-authorized-ip add 192.168.0.1/24'' ")
+        print("[202] Error: Invalid command.\n   Use Add or Remove 'gcloud-sql-add-authorized-ip instanceName add 192.168.0.1/24'' ")
     else: 
         #call google cloud sql api to get configuration in json format
         
