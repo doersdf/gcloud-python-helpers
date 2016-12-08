@@ -13,7 +13,8 @@ import re
 pattern = re.compile("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$")
 
 
-if len(sys.argv)==3:
+if len(sys.argv)==4:
+    instanceName = sys.argv[3]
     newIP = sys.argv[2]
     command = sys.argv[1]
     if pattern.match(newIP)==None:
@@ -23,7 +24,7 @@ if len(sys.argv)==3:
     else: 
         #call google cloud sql api to get configuration in json format
         
-        p = subprocess.Popen("gcloud sql instances describe steps-sql --format json", shell=True, stdout=subprocess.PIPE)
+        p = subprocess.Popen("gcloud sql instances describe " + instanceName + " --format json", shell=True, stdout=subprocess.PIPE)
         p.wait()
 
         out, err = p.communicate()
@@ -44,7 +45,7 @@ if len(sys.argv)==3:
                 ips = newIP + ips
             else:
                 ips = ips[1:]
-            p = subprocess.Popen("gcloud sql instances patch steps-sql --authorized-networks=" + ips, shell=True, stdout=subprocess.PIPE)
+            p = subprocess.Popen("gcloud sql instances patch " + instanceName + " --authorized-networks=" + ips, shell=True, stdout=subprocess.PIPE)
             p.wait()
             print("[100] OK. Current authorizedNetworks = " + ips)
         else:
@@ -54,5 +55,5 @@ if len(sys.argv)==3:
                 print("[200] Warning: Especified IP not found. Nothing done.")
               
 else:
-    print("[201] Error: 2 argument required.\n   Usage 'gcloud-sql-add-authorized-ip.py add 192.168.0.1/24 ")
+    print("[201] Error: 3 argument required.\n   Usage 'gcloud-sql-add-authorized-ip.py yourInstanceName add 192.168.0.1/24 ")
 
